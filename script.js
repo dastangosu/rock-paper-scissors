@@ -18,7 +18,7 @@ function getComputerChoice() {
 function playRound(computerSelection, playerSelection) {
 
   if (playerSelection === "rock") {
-    switch(computerSelection) {
+    switch (computerSelection) {
       case "rock":
         return "draw";
         break;
@@ -27,11 +27,11 @@ function playRound(computerSelection, playerSelection) {
         break;
       case "scissors":
         return "player"
-        break;  
+        break;
     }
   }
   else if (playerSelection === "paper") {
-    switch(computerSelection) {
+    switch (computerSelection) {
       case "rock":
         return "player";
         break;
@@ -40,11 +40,11 @@ function playRound(computerSelection, playerSelection) {
         break;
       case "scissors":
         return "comp"
-        break;  
+        break;
     }
   }
   else {
-    switch(computerSelection) {
+    switch (computerSelection) {
       case "rock":
         return "comp";
         break;
@@ -53,53 +53,111 @@ function playRound(computerSelection, playerSelection) {
         break;
       case "scissors":
         return "draw"
-        break;  
+        break;
     }
   }
 }
 
-function game() {
-  let playerScore = 0;
-  let compScore = 0;
-  for(let i = 0; i<5; i++) {
-    if(playerScore === 3) {
-      console.log("Player Wins the Game!") ;
-      return;
+const rock = document.querySelector('#rock');
+const paper = document.querySelector('#paper');
+const scissors = document.querySelector('#scissors');
+const player = document.querySelector('#player p');
+const computer = document.querySelector('#computer p');
+const playerSelection = document.querySelector('#player .selection');
+const compSelection = document.querySelector('#computer .selection');
+
+let playerScore = 0;
+let compScore = 0;
+let gameFinished = false;
+let gameWinner;
+
+function announceWinner (winner) {
+  setTimeout(function () {
+    if (confirm(winner + ' Wins the Game!')) {
+      restartGame();
     }
-    else if (compScore ===3) {
-      console.log("Computer Wins the Game!");
-      return;
+  }, 0)
+}
+function restartGame() {
+  playerScore = 0;
+  compScore = 0;
+  gameFinished=false;
+  player.textContent = 'Player: ' + playerScore;
+  computer.textContent = 'Computer: ' + compScore;
+  compSelection.textContent = '';
+  playerSelection.textContent = '';
+}
+function evaluateRound(roundWinner) {
+  if (!gameFinished) {
+    if (roundWinner === "player") {
+      playerScore++;
+      player.textContent = 'Player: ' + playerScore;
+      console.log('Player Wins the Round');
+      if (playerScore === 5) {
+        gameFinished = true;
+        gameWinner = 'Player';
+        announceWinner(gameWinner);
+        console.log('Player Wins the Game')
+      }
+    }
+    else if (roundWinner === "comp") {
+      compScore++;
+      computer.textContent = 'Computer: ' + compScore;
+      console.log('Computer Wins the Round');
+      if (compScore === 5) {
+        gameFinished = true;
+        gameWinner = 'Computer';
+        announceWinner(gameWinner);
+        console.log('Computer Wins the Game')
+      }
     }
     else {
-      let playerSelection = prompt("Choose a hand: rock, paper, or scissors?").toLowerCase()
-      while(playerSelection !== "rock" && playerSelection !== "paper" && playerSelection !== "scissors") {
-        playerSelection = prompt("Incorrect input. Choose a hand: rock, paper, or scissors?").toLowerCase()
-      }
-      let computerSelection = getComputerChoice();
-      let roundResult = playRound(computerSelection,playerSelection);
-      if(roundResult === "player") {
-        console.log("Player wins the round!")
-        playerScore++;
-      }
-      else if (roundResult === "comp") {
-        console.log("Computer wins the round!")
-        compScore++;
-      }
-      else {
-        console.log("Draw round!")
-      }
+      console.log('Draw Round!')
     }
   }
-  if(compScore>playerScore) {
-    console.log("Computer Wins the Game!")
-  }
-  else if (compScore<playerScore) {
-    console.log("Player Wins the Game!")
-  }
   else {
-    console.log("Draw Game!")
+    announceWinner(gameWinner);
   }
 }
+function convertCompSelection(selection) {
+  if(selection === 'rock') {
+    return '👊';
+  }
+  else if(selection === 'paper') {
+    return '🖐';
+  }
+  else {
+    return '✌';
+  }
+}
+
+function game() {
+  let roundResult;
+  rock.addEventListener('click', function () {
+    let computerChoice = getComputerChoice();
+    playerSelection.textContent = '👊';
+    compSelection.textContent = convertCompSelection(computerChoice);
+    roundResult = playRound(computerChoice, 'rock');
+    evaluateRound(roundResult);
+
+  });
+  paper.addEventListener('click', function () {
+    let computerChoice = getComputerChoice();
+    playerSelection.textContent = '🖐';
+    compSelection.textContent = convertCompSelection(computerChoice);
+    roundResult = playRound(computerChoice, 'paper');
+    evaluateRound(roundResult);
+  });
+  scissors.addEventListener('click', function () {
+    let computerChoice = getComputerChoice();
+    playerSelection.textContent = '✌';
+    compSelection.textContent = convertCompSelection(computerChoice);
+    roundResult = playRound(computerChoice, 'scissors');
+    evaluateRound(roundResult);
+  });
+}
+
 game();
+
 
 
