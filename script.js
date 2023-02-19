@@ -135,23 +135,29 @@ function game() {
   let roundResult;
   rock.addEventListener('click', function () {
     let computerChoice = getComputerChoice();
-    playerSelection.textContent = '👊';
-    compSelection.textContent = convertCompSelection(computerChoice);
+    if(!gameFinished) {
+      playerSelection.textContent = '👊';
+      compSelection.textContent = convertCompSelection(computerChoice);
+    }
     roundResult = playRound(computerChoice, 'rock');
     evaluateRound(roundResult);
 
   });
   paper.addEventListener('click', function () {
     let computerChoice = getComputerChoice();
-    playerSelection.textContent = '🖐';
-    compSelection.textContent = convertCompSelection(computerChoice);
+    if(!gameFinished) {
+      playerSelection.textContent = '🖐';
+      compSelection.textContent = convertCompSelection(computerChoice);
+    }
     roundResult = playRound(computerChoice, 'paper');
     evaluateRound(roundResult);
   });
   scissors.addEventListener('click', function () {
     let computerChoice = getComputerChoice();
-    playerSelection.textContent = '✌';
-    compSelection.textContent = convertCompSelection(computerChoice);
+    if(!gameFinished) {
+      playerSelection.textContent = '✌';
+      compSelection.textContent = convertCompSelection(computerChoice);
+    }
     roundResult = playRound(computerChoice, 'scissors');
     evaluateRound(roundResult);
   });
